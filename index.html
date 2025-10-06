@@ -49,7 +49,7 @@
         <li>[Azure SMS Test] This is a sample notification for testing purposes.</li>
         <li>[Azure SMS Test] Debug: App triggered SMS successfully at 3:00 PM.</li>
       </ul>
-      <p class="muted">Message frequency is expected to be very low (typically under 30 per month). Message &amp; data rates may apply.</p>
+      <p class="muted">Message frequency is expected to be very low (typically under 10 per month). Message &amp; data rates may apply.</p>
     </div>
 
     <h2>Opt-In</h2>
@@ -68,30 +68,24 @@
         <input id="optinEmail" type="email" placeholder="you@example.com"/>
 
         <button type="submit">Request Opt-In</button>
-        <div id="optinOk" class="ok">Thanks! Your opt-in request has been recorded for demo purposes.</div>
+        <div id="optinOk" class="ok">Thanks! Your opt-in request has been recorded.</div>
         <div id="optinErr" class="err">There was a problem. Please check your number and try again.</div>
       </form>
-
-      <p class="muted"><em>This is a demo form on a static site (GitHub Pages). Numbers are not stored here automatically.</em></p>
-      <div class="note">
-        <strong>How this is handled:</strong> Opt-ins are managed manually or via a backend endpoint (see “How to actually capture submissions” below).
-      </div>
+      
     </div>
 
     <h2>Opt-Out</h2>
     <div class="card">
-      <p>You may opt out at any time by replying <code>STOP</code> to any SMS or by contacting me directly. For demonstration, you can also use the form below.</p>
+      <p>You may opt out at any time by replying <code>STOP</code> to any SMS or by contacting me directly. Additionally, you can also use the form below.</p>
 
       <!-- Demo Opt-Out Form (static) -->
       <form id="optoutForm" aria-label="Opt-Out Form">
         <label for="optoutPhone">Phone Number</label>
         <input id="optoutPhone" type="tel" placeholder="+1 555 123 4567" required/>
         <button type="submit">Request Opt-Out</button>
-        <div id="optoutOk" class="ok">Your opt-out request has been recorded for demo purposes.</div>
+        <div id="optoutOk" class="ok">Your opt-out request has been recorded.</div>
         <div id="optoutErr" class="err">There was a problem. Please check your number and try again.</div>
       </form>
-
-      <p class="muted"><em>On a live backend, this would immediately suppress future messages to your number.</em></p>
     </div>
 
     <h2>Additional Information</h2>
