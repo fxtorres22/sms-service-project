@@ -102,18 +102,6 @@
       </p>
     </div>
 
-    <div class="card">
-      <h3>How to actually capture submissions (for reviewers)</h3>
-      <p class="muted">
-        This page is hosted on GitHub Pages (static). To store opt-in/opt-out submissions, I can connect this form to a backend (e.g., Azure Function or Logic App) and persist to Azure Storage. See notes below.
-      </p>
-      <ul class="muted">
-        <li><strong>Azure Function (HTTP trigger):</strong> Receive JSON, validate, store in Azure Table/Storage/Database, optionally email a confirmation (e.g., via SendGrid).</li>
-        <li><strong>Azure Logic App (HTTP request trigger):</strong> No-code flow to log to a spreadsheet/Storage and notify me.</li>
-        <li><strong>Alternative no-backend options:</strong> Google Forms (embed) or Formspree/Netlify Forms for quick capture.</li>
-      </ul>
-    </div>
-
     <footer>© 2025 Fernando Torres — Personal Learning Project</footer>
   </div>
 
