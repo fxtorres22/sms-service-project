@@ -116,28 +116,17 @@
       const phone = document.getElementById('optinPhone').value;
       if (!validPhone(phone)) { optinErr.style.display = 'block'; return; }
 
-      // Example: POST to backend (uncomment & replace URL)
-      // try {
-      //   const res = await fetch('https://<your-azure-function>.azurewebsites.net/api/optin', {
-      //     method: 'POST',
-      //     headers: { 'Content-Type': 'application/json' },
-      //     body: JSON.stringify({
-      //       name: document.getElementById('optinName').value,
-      //       phone,
-      //       email: document.getElementById('optinEmail').value,
-      //       source: 'github-pages'
-      //     })
-      //   });
-      //   if (!res.ok) throw new Error('bad status');
-      //   optinOk.style.display = 'block';
-      // } catch {
-      //   optinErr.style.display = 'block';
-      // }
-
-      // Demo mode:
-      await fakeLatency(500);
-      optinOk.style.display = 'block';
-      e.target.reset();
+      await fetch('https://prod-40.eastus.logic.azure.com:443/workflows/9a775117498d46a68b56f90fa04582fe/triggers/When_an_HTTP_request_is_received/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2FWhen_an_HTTP_request_is_received%2Frun&sv=1.0&sig=9fEtWpRHtfklVKbaiZhUyiIaQtCrAob6f55f0tFWrAU', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+        name: document.getElementById('optinName').value,
+        phone: document.getElementById('optinPhone').value,
+        email: document.getElementById('optinEmail').value,
+        source: 'github-pages'
+        })
+    });
+      
     });
 
     const optoutForm = document.getElementById('optoutForm');
@@ -150,23 +139,14 @@
       const phone = document.getElementById('optoutPhone').value;
       if (!validPhone(phone)) { optoutErr.style.display = 'block'; return; }
 
-      // Example: POST to backend (uncomment & replace URL)
-      // try {
-      //   const res = await fetch('https://<your-azure-function>.azurewebsites.net/api/optout', {
-      //     method: 'POST',
-      //     headers: { 'Content-Type': 'application/json' },
-      //     body: JSON.stringify({ phone, source: 'github-pages' })
-      //   });
-      //   if (!res.ok) throw new Error('bad status');
-      //   optoutOk.style.display = 'block';
-      // } catch {
-      //   optoutErr.style.display = 'block';
-      // }
-
-      // Demo mode:
-      await fakeLatency(500);
-      optoutOk.style.display = 'block';
-      e.target.reset();
+      await fetch('https://prod-74.eastus.logic.azure.com:443/workflows/c6d0bf13793a44869bceb55c6a550b8c/triggers/When_an_HTTP_request_is_received/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2FWhen_an_HTTP_request_is_received%2Frun&sv=1.0&sig=jtFAeP9typPEJllSBBIWz3vTXULdKtgG1cK1YOxdkAo', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+        phone: document.getElementById('optoutPhone').value
+        })
+      });
+      
     });
   </script>
 </body>
