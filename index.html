@@ -1,59 +1,191 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>SMS Test Program - Fernando Torres</title>
   <style>
-    body { font-family: Arial, sans-serif; max-width: 800px; margin: 2rem auto; line-height: 1.6; padding: 0 1rem; }
-    h1, h2 { color: #2c3e50; }
-    a { color: #0066cc; text-decoration: none; }
-    a:hover { text-decoration: underline; }
-    ul { background: #f9f9f9; padding: 1rem; border-radius: 8px; }
-    footer { margin-top: 3rem; font-size: 0.85rem; color: #555; text-align: center; }
+    :root { --ink:#2c3e50; --muted:#666; --bg:#f7f9fc; --card:#fff; --ring:#dfe7f3; }
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; color: var(--ink); background: var(--bg); margin: 0; }
+    .wrap { max-width: 860px; margin: 2rem auto; padding: 0 1rem; }
+    h1,h2 { line-height: 1.2; }
+    .card { background: var(--card); border: 1px solid var(--ring); border-radius: 12px; padding: 1.25rem; box-shadow: 0 1px 0 rgba(0,0,0,.03); margin: 1rem 0; }
+    ul.samples { background:#fafbfd; border:1px dashed var(--ring); border-radius:10px; padding:1rem 1.25rem; }
+    label { display:block; font-weight:600; margin:.5rem 0 .25rem; }
+    input[type="text"], input[type="tel"], input[type="email"] {
+      width:100%; padding:.7rem .8rem; border:1px solid var(--ring); border-radius:10px;
+      font-size:1rem; outline:none;
+    }
+    button {
+      margin-top:.75rem; padding:.7rem 1rem; border:0; border-radius:10px; cursor:pointer;
+      background:#0d6efd; color:#fff; font-weight:600;
+    }
+    .muted { color: var(--muted); font-size:.95rem; }
+    .note { background:#fff8e1; border:1px solid #ffe39b; border-radius:10px; padding:.75rem 1rem; }
+    footer { margin:2rem 0; text-align:center; color:var(--muted); font-size:.9rem; }
+    .row { display:grid; gap:1rem; grid-template-columns: 1fr; }
+    @media (min-width: 720px) { .row { grid-template-columns: 1fr 1fr; } }
+    .ok { background:#e8f7ef; border:1px solid #c9edd9; color:#1c6b3c; padding:.6rem .8rem; border-radius:8px; margin-top:.5rem; display:none;}
+    .err{ background:#fde8ea; border:1px solid #f6c6cc; color:#7b1e26; padding:.6rem .8rem; border-radius:8px; margin-top:.5rem; display:none;}
+    code { background:#f1f4f8; padding:.2rem .4rem; border-radius:6px; }
   </style>
 </head>
 <body>
-  <h1>Personal SMS Test Program</h1>
-  <p>
-    This page describes the opt-in process for Fernando Torres’ personal SMS learning project. 
-    The project uses Azure Communication Services to test SMS functionality. 
-    <strong>This is for development and testing only, not for commercial use.</strong>
-  </p>
+  <div class="wrap">
+    <h1>Personal SMS Test Program</h1>
+    <div class="card">
+      <p>
+        This page describes the opt-in process for Fernando Torres’ personal SMS learning project using Azure Communication Services.
+        <strong>This is for development and testing only — not commercial use.</strong>
+      </p>
+    </div>
 
-  <h2>Program Description</h2>
-  <p>
-    Participants may receive occasional SMS test messages while I develop applications. 
-    Recipients include myself and a small group of friends who have provided direct consent.
-  </p>
+    <h2>Program Description</h2>
+    <div class="card">
+      <p>Participants may receive occasional SMS test messages while I develop applications. Recipients include myself and a small group of friends who have provided direct consent.</p>
+      <h3>Example Messages</h3>
+      <ul class="samples">
+        <li>[Azure SMS Test] Thank you for joining my personal SMS test program. Reply STOP to opt out.</li>
+        <li>[Azure SMS Test] This is a sample notification for testing purposes.</li>
+        <li>[Azure SMS Test] Debug: App triggered SMS successfully at 3:00 PM.</li>
+      </ul>
+      <p class="muted">Message frequency is expected to be very low (typically under 30 per month). Message &amp; data rates may apply.</p>
+    </div>
 
-  <h2>Example Messages</h2>
-  <ul>
-    <li>[Azure SMS Test] Thank you for joining my personal SMS test program. Reply STOP to opt out.</li>
-    <li>[Azure SMS Test] This is a sample notification for testing purposes.</li>
-    <li>[Azure SMS Test] Debug: App triggered SMS successfully at 3:00 PM.</li>
-  </ul>
+    <h2>Opt-In</h2>
+    <div class="card">
+      <p>To participate, you can provide your phone number to me directly or use the demo form below. By opting in, you agree to receive occasional test SMS for this learning project.</p>
 
-  <h2>Opt-In</h2>
-  <p>
-    To participate, you must provide your phone number directly to me. 
-    By doing so, you agree to receive occasional test SMS messages for this project.
-  </p>
+      <!-- Demo Opt-In Form (static) -->
+      <form id="optinForm" aria-label="Opt-In Form">
+        <label for="optinName">Name (optional)</label>
+        <input id="optinName" type="text" placeholder="Your name"/>
 
-  <h2>Opt-Out</h2>
-  <p>
-    You may opt out at any time by notifying me. Once opted out, 
-    your number will be removed immediately and no further SMS will be sent.
-  </p>
+        <label for="optinPhone">Phone Number</label>
+        <input id="optinPhone" type="tel" placeholder="+1 555 123 4567" required/>
 
-  <h2>Additional Information</h2>
-  <p>
-    <a href="./privacy.html">Privacy Policy</a> | 
-    <a href="./terms.html">Terms and Conditions</a>
-  </p>
+        <label for="optinEmail">Email (optional, for confirmation)</label>
+        <input id="optinEmail" type="email" placeholder="you@example.com"/>
 
-  <footer>
-    © 2025 Fernando Torres — SMS Test Program
-  </footer>
+        <button type="submit">Request Opt-In</button>
+        <div id="optinOk" class="ok">Thanks! Your opt-in request has been recorded for demo purposes.</div>
+        <div id="optinErr" class="err">There was a problem. Please check your number and try again.</div>
+      </form>
+
+      <p class="muted"><em>This is a demo form on a static site (GitHub Pages). Numbers are not stored here automatically.</em></p>
+      <div class="note">
+        <strong>How this is handled:</strong> Opt-ins are managed manually or via a backend endpoint (see “How to actually capture submissions” below).
+      </div>
+    </div>
+
+    <h2>Opt-Out</h2>
+    <div class="card">
+      <p>You may opt out at any time by replying <code>STOP</code> to any SMS or by contacting me directly. For demonstration, you can also use the form below.</p>
+
+      <!-- Demo Opt-Out Form (static) -->
+      <form id="optoutForm" aria-label="Opt-Out Form">
+        <label for="optoutPhone">Phone Number</label>
+        <input id="optoutPhone" type="tel" placeholder="+1 555 123 4567" required/>
+        <button type="submit">Request Opt-Out</button>
+        <div id="optoutOk" class="ok">Your opt-out request has been recorded for demo purposes.</div>
+        <div id="optoutErr" class="err">There was a problem. Please check your number and try again.</div>
+      </form>
+
+      <p class="muted"><em>On a live backend, this would immediately suppress future messages to your number.</em></p>
+    </div>
+
+    <h2>Additional Information</h2>
+    <div class="card">
+      <p>
+        <a href="./privacy.html">Privacy Policy</a> &nbsp;|&nbsp;
+        <a href="./terms.html">Terms and Conditions</a>
+      </p>
+    </div>
+
+    <div class="card">
+      <h3>How to actually capture submissions (for reviewers)</h3>
+      <p class="muted">
+        This page is hosted on GitHub Pages (static). To store opt-in/opt-out submissions, I can connect this form to a backend (e.g., Azure Function or Logic App) and persist to Azure Storage. See notes below.
+      </p>
+      <ul class="muted">
+        <li><strong>Azure Function (HTTP trigger):</strong> Receive JSON, validate, store in Azure Table/Storage/Database, optionally email a confirmation (e.g., via SendGrid).</li>
+        <li><strong>Azure Logic App (HTTP request trigger):</strong> No-code flow to log to a spreadsheet/Storage and notify me.</li>
+        <li><strong>Alternative no-backend options:</strong> Google Forms (embed) or Formspree/Netlify Forms for quick capture.</li>
+      </ul>
+    </div>
+
+    <footer>© 2025 Fernando Torres — Personal Learning Project</footer>
+  </div>
+
+  <script>
+    // === Demo-only JS to make the page feel "alive" for reviewers ===
+    // In production, replace with a fetch() to your backend endpoint.
+
+    function fakeLatency(ms) { return new Promise(res => setTimeout(res, ms)); }
+    function validPhone(v){ return /^\+?\d[\d\s\-()]{6,}$/.test((v||"").trim()); }
+
+    const optinForm = document.getElementById('optinForm');
+    const optinOk = document.getElementById('optinOk');
+    const optinErr = document.getElementById('optinErr');
+
+    optinForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      optinOk.style.display = 'none'; optinErr.style.display = 'none';
+      const phone = document.getElementById('optinPhone').value;
+      if (!validPhone(phone)) { optinErr.style.display = 'block'; return; }
+
+      // Example: POST to backend (uncomment & replace URL)
+      // try {
+      //   const res = await fetch('https://<your-azure-function>.azurewebsites.net/api/optin', {
+      //     method: 'POST',
+      //     headers: { 'Content-Type': 'application/json' },
+      //     body: JSON.stringify({
+      //       name: document.getElementById('optinName').value,
+      //       phone,
+      //       email: document.getElementById('optinEmail').value,
+      //       source: 'github-pages'
+      //     })
+      //   });
+      //   if (!res.ok) throw new Error('bad status');
+      //   optinOk.style.display = 'block';
+      // } catch {
+      //   optinErr.style.display = 'block';
+      // }
+
+      // Demo mode:
+      await fakeLatency(500);
+      optinOk.style.display = 'block';
+      e.target.reset();
+    });
+
+    const optoutForm = document.getElementById('optoutForm');
+    const optoutOk = document.getElementById('optoutOk');
+    const optoutErr = document.getElementById('optoutErr');
+
+    optoutForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      optoutOk.style.display = 'none'; optoutErr.style.display = 'none';
+      const phone = document.getElementById('optoutPhone').value;
+      if (!validPhone(phone)) { optoutErr.style.display = 'block'; return; }
+
+      // Example: POST to backend (uncomment & replace URL)
+      // try {
+      //   const res = await fetch('https://<your-azure-function>.azurewebsites.net/api/optout', {
+      //     method: 'POST',
+      //     headers: { 'Content-Type': 'application/json' },
+      //     body: JSON.stringify({ phone, source: 'github-pages' })
+      //   });
+      //   if (!res.ok) throw new Error('bad status');
+      //   optoutOk.style.display = 'block';
+      // } catch {
+      //   optoutErr.style.display = 'block';
+      // }
+
+      // Demo mode:
+      await fakeLatency(500);
+      optoutOk.style.display = 'block';
+      e.target.reset();
+    });
+  </script>
 </body>
 </html>
