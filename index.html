@@ -4,6 +4,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>SMS Service Project - Fernando Torres</title>
+
+  <!-- Canonical & crawler-friendly meta -->
+  <link rel="canonical" href="https://www.sms-service-project.org/">
+  <meta name="robots" content="index,follow">
+  <meta name="description" content="Public opt-in page for Fernando Torres’ personal SMS Service Project using Azure Communication Services. Educational and non-commercial.">
+
   <style>
     :root { --ink:#2c3e50; --muted:#666; --bg:#f7f9fc; --card:#fff; --ring:#dfe7f3; }
     body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; color: var(--ink); background: var(--bg); margin: 0; }
@@ -52,11 +58,11 @@
       <p class="muted">Message frequency is expected to be very low (typically under 10 per month). Message &amp; data rates may apply.</p>
     </div>
 
-    <h2>Opt-In</h2>
+    <!-- ===== Opt-In Section (anchor for reviewers) ===== -->
+    <h2 id="opt-in">Opt-In</h2>
     <div class="card">
       <p>To participate, you can provide your phone number to me directly or use the form below. By opting in, you agree to receive occasional test SMS for this learning project.</p>
 
-      <!-- Demo Opt-In Form (static) -->
       <form id="optinForm" aria-label="Opt-In Form">
         <label for="optinName">Name (optional)</label>
         <input id="optinName" type="text" placeholder="Your name"/>
@@ -67,21 +73,36 @@
         <label for="optinEmail">Email (optional, for confirmation)</label>
         <input id="optinEmail" type="email" placeholder="you@example.com"/>
 
+        <!-- Compliance notice directly above the button -->
+        <p class="muted">
+          By entering your number and clicking “Request Opt-In,” you consent to receive occasional
+          test SMS from this personal learning project. Msg &amp; data rates may apply.
+          Reply STOP to opt out or use the web opt-out form. See
+          <a href="./privacy.html">Privacy Policy</a> and
+          <a href="./terms.html">Terms &amp; Conditions</a>.
+        </p>
+
         <button type="submit">Request Opt-In</button>
         <div id="optinOk" class="ok">Thanks! Your opt-in request has been recorded.</div>
         <div id="optinErr" class="err">There was a problem. Please check your number and try again.</div>
       </form>
-      
     </div>
 
-    <h2>Opt-Out</h2>
+    <h2 id="opt-out">Opt-Out</h2>
     <div class="card">
       <p>You may opt out at any time by replying <code>STOP</code> to any SMS or by contacting me directly. Additionally, you can also use the form below.</p>
 
-      <!-- Demo Opt-Out Form (static) -->
       <form id="optoutForm" aria-label="Opt-Out Form">
         <label for="optoutPhone">Phone Number</label>
         <input id="optoutPhone" type="tel" placeholder="+1 555 123 4567" required/>
+
+        <!-- Compliance text mirrors opt-in -->
+        <p class="muted">
+          You can opt out at any time. Reply STOP to any SMS or submit this form to request removal.
+          See <a href="./privacy.html">Privacy Policy</a> and
+          <a href="./terms.html">Terms &amp; Conditions</a>.
+        </p>
+
         <button type="submit">Request Opt-Out</button>
         <div id="optoutOk" class="ok">Your opt-out request has been recorded.</div>
         <div id="optoutErr" class="err">There was a problem. Please check your number and try again.</div>
@@ -104,10 +125,8 @@
   const OPTIN_URL  = 'https://prod-40.eastus.logic.azure.com:443/workflows/9a775117498d46a68b56f90fa04582fe/triggers/When_an_HTTP_request_is_received/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2FWhen_an_HTTP_request_is_received%2Frun&sv=1.0&sig=9fEtWpRHtfklVKbaiZhUyiIaQtCrAob6f55f0tFWrAU';
   const OPTOUT_URL = 'https://prod-74.eastus.logic.azure.com:443/workflows/c6d0bf13793a44869bceb55c6a550b8c/triggers/When_an_HTTP_request_is_received/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2FWhen_an_HTTP_request_is_received%2Frun&sv=1.0&sig=jtFAeP9typPEJllSBBIWz3vTXULdKtgG1cK1YOxdkAo';
 
-  // Basic phone sanity check (keeps your current pattern)
   function validPhone(v){ return /^\+?\d[\d\s\-()]{6,}$/.test((v||"").trim()); }
 
-  // Utility: disable/enable a form's button while submitting
   function setSubmitting(formEl, isSubmitting) {
     const btn = formEl.querySelector('button[type="submit"]');
     if (!btn) return;
@@ -120,7 +139,6 @@
   const optinOk = document.getElementById('optinOk');
   const optinErr = document.getElementById('optinErr');
 
-  // remember original label for UX
   (function(){ 
     const b = optinForm.querySelector('button[type="submit"]'); 
     if (b) b.setAttribute('data-label', b.textContent);
@@ -159,8 +177,6 @@
         throw new Error('HTTP ' + res.status + ' ' + t);
       }
 
-      // Optional: check JSON body if your Logic App returns { ok: true }
-      // const data = await res.json();
       optinOk.style.display = 'block';
       optinForm.reset();
     } catch (err) {
