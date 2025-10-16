@@ -27,10 +27,7 @@
       background:#0d6efd; color:#fff; font-weight:600;
     }
     .muted { color: var(--muted); font-size:.95rem; }
-    .note { background:#fff8e1; border:1px solid #ffe39b; border-radius:10px; padding:.75rem 1rem; }
     footer { margin:2rem 0; text-align:center; color:var(--muted); font-size:.9rem; }
-    .row { display:grid; gap:1rem; grid-template-columns: 1fr; }
-    @media (min-width: 720px) { .row { grid-template-columns: 1fr 1fr; } }
     .ok { background:#e8f7ef; border:1px solid #c9edd9; color:#1c6b3c; padding:.6rem .8rem; border-radius:8px; margin-top:.5rem; display:none;}
     .err{ background:#fde8ea; border:1px solid #f6c6cc; color:#7b1e26; padding:.6rem .8rem; border-radius:8px; margin-top:.5rem; display:none;}
     code { background:#f1f4f8; padding:.2rem .4rem; border-radius:6px; }
@@ -80,7 +77,7 @@
         <p id="optinCompliance" class="muted">
           By entering your number and clicking “Request Opt-In,” you consent to receive occasional test SMS from this personal learning project.
           Msg &amp; data rates may apply. Reply <strong>STOP</strong> to end (you’ll receive: “You have successfully opted out and will receive no further messages.”).
-          Reply <strong>HELP</strong> for assistance (response: “For help with this test program, email <a href="mailto:contact@sms-service-project.org">contact@sms-service-project.org</a>.”).
+          Reply <strong>HELP</strong> for assistance (response: “For help with this test program, email contact@sms-service-project.org.”).
           See <a href="./privacy.html">Privacy Policy</a> and <a href="./terms.html">Terms &amp; Conditions</a>. Frequency: under 10/month.
         </p>
 
@@ -118,8 +115,8 @@
       <p>
         <a href="./privacy.html">Privacy Policy</a> &nbsp;|&nbsp;
         <a href="./terms.html">Terms and Conditions</a> &nbsp;|&nbsp;
-        <a href="./opt-in.html">Minimal Opt-In Page</a>
-        <a href="./opt-out.html">Opt-Out Page</a>
+        <a href="./opt-in.html">Minimal Opt-In Page</a> &nbsp;|&nbsp;
+        <a href="./opt-out.html">Minimal Opt-Out Page</a>
       </p>
     </div>
 
@@ -139,7 +136,7 @@
   const OPTIN_URL  = 'https://prod-40.eastus.logic.azure.com:443/workflows/9a775117498d46a68b56f90fa04582fe/triggers/When_an_HTTP_request_is_received/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2FWhen_an_HTTP_request_is_received%2Frun&sv=1.0&sig=9fEtWpRHtfklVKbaiZhUyiIaQtCrAob6f55f0tFWrAU';
   const OPTOUT_URL = 'https://prod-74.eastus.logic.azure.com:443/workflows/c6d0bf13793a44869bceb55c6a550b8c/triggers/When_an_HTTP_request_is_received/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2FWhen_an_HTTP_request_is_received%2Frun&sv=1.0&sig=jtFAeP9typPEJllSBBIWz3vTXULdKtgG1cK1YOxdkAo';
 
-  function validPhone(v){ return /^\+?\d[\d\s\-()\. ,]{6,}$/.test((v||"").trim()); }
+  function validPhone(v){ return /^\+?\d[\d\s\-()\.\,]{6,}$/.test((v||"").trim()); }
 
   function setSubmitting(formEl, isSubmitting) {
     const btn = formEl.querySelector('button[type="submit"]');
