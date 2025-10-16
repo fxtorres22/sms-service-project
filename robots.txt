@@ -1,2 +1,3 @@
 User-agent: *
 Disallow:
+Sitemap: https://www.sms-service-project.org/sitemap.xml
