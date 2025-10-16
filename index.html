@@ -44,6 +44,7 @@
         This page describes the opt-in process for Fernando Torres’ personal SMS learning project using Azure Communication Services.
         <strong>This is for development and testing only — not commercial use.</strong>
       </p>
+      <p class="muted">Questions? Contact <a href="mailto:fernando@example.com">fernando@example.com</a>.</p>
     </div>
 
     <h2>Program Description</h2>
@@ -55,7 +56,7 @@
         <li>[Azure SMS Test] This is a sample notification for testing purposes.</li>
         <li>[Azure SMS Test] Debug: App triggered SMS successfully at 3:00 PM.</li>
       </ul>
-      <p class="muted">Message frequency is expected to be very low (typically under 10 per month). Message &amp; data rates may apply.</p>
+      <p class="muted">Message frequency is expected to be very low (typically under 10 per month). Message &amp; data rates may apply. Carriers are not liable for delayed or undelivered messages.</p>
     </div>
 
     <!-- ===== Opt-In Section (anchor for reviewers) ===== -->
@@ -65,21 +66,22 @@
 
       <form id="optinForm" aria-label="Opt-In Form">
         <label for="optinName">Name (optional)</label>
-        <input id="optinName" type="text" placeholder="Your name"/>
+        <input id="optinName" type="text" placeholder="Your name" inputmode="text" autocomplete="name" />
 
         <label for="optinPhone">Phone Number</label>
-        <input id="optinPhone" type="tel" placeholder="+1 555 123 4567" required/>
+        <input id="optinPhone" type="tel" placeholder="+1 555 123 4567" required
+               inputmode="tel" autocomplete="tel"
+               pattern="^\+?[0-9\s()\-\.\,]{7,}$" aria-describedby="optinCompliance" />
 
         <label for="optinEmail">Email (optional, for confirmation)</label>
-        <input id="optinEmail" type="email" placeholder="you@example.com"/>
+        <input id="optinEmail" type="email" placeholder="you@example.com" inputmode="email" autocomplete="email" />
 
         <!-- Compliance notice directly above the button -->
-        <p class="muted">
-          By entering your number and clicking “Request Opt-In,” you consent to receive occasional
-          test SMS from this personal learning project. Msg &amp; data rates may apply.
-          Reply STOP to opt out or use the web opt-out form. See
-          <a href="./privacy.html">Privacy Policy</a> and
-          <a href="./terms.html">Terms &amp; Conditions</a>.
+        <p id="optinCompliance" class="muted">
+          By entering your number and clicking “Request Opt-In,” you consent to receive occasional test SMS from this personal learning project.
+          Msg &amp; data rates may apply. Reply <strong>STOP</strong> to end (you’ll receive: “You have successfully opted out and will receive no further messages.”).
+          Reply <strong>HELP</strong> for assistance (response: “For help with this test program, email fernando@example.com.”).
+          See <a href="./privacy.html">Privacy Policy</a> and <a href="./terms.html">Terms &amp; Conditions</a>. Frequency: under 10/month.
         </p>
 
         <button type="submit">Request Opt-In</button>
@@ -94,13 +96,15 @@
 
       <form id="optoutForm" aria-label="Opt-Out Form">
         <label for="optoutPhone">Phone Number</label>
-        <input id="optoutPhone" type="tel" placeholder="+1 555 123 4567" required/>
+        <input id="optoutPhone" type="tel" placeholder="+1 555 123 4567" required
+               inputmode="tel" autocomplete="tel"
+               pattern="^\+?[0-9\s()\-\.\,]{7,}$" aria-describedby="optoutCompliance" />
 
-        <!-- Compliance text mirrors opt-in -->
-        <p class="muted">
-          You can opt out at any time. Reply STOP to any SMS or submit this form to request removal.
-          See <a href="./privacy.html">Privacy Policy</a> and
-          <a href="./terms.html">Terms &amp; Conditions</a>.
+        <p id="optoutCompliance" class="muted">
+          You can opt out at any time. Reply <strong>STOP</strong> to any SMS or submit this form to request removal.
+          You will receive a confirmation: “You have successfully opted out and will receive no further messages.”
+          For help, reply <strong>HELP</strong> or email <a href="mailto:fernando@example.com">fernando@example.com</a>.
+          See <a href="./privacy.html">Privacy Policy</a> and <a href="./terms.html">Terms &amp; Conditions</a>.
         </p>
 
         <button type="submit">Request Opt-Out</button>
@@ -113,11 +117,20 @@
     <div class="card">
       <p>
         <a href="./privacy.html">Privacy Policy</a> &nbsp;|&nbsp;
-        <a href="./terms.html">Terms and Conditions</a>
+        <a href="./terms.html">Terms and Conditions</a> &nbsp;|&nbsp;
+        <a href="./opt-in.html">Minimal Opt-In Page</a>
       </p>
     </div>
 
     <footer>© 2025 Fernando Torres — SMS Service Project</footer>
+
+    <!-- No-JS fallback for reviewers/crawlers -->
+    <noscript>
+      <div class="card">
+        <p><strong>JavaScript is disabled.</strong> To request opt-in, email your phone number to
+          <a href="mailto:fernando@example.com">fernando@example.com</a> with the subject “Opt-In Request”.</p>
+      </div>
+    </noscript>
   </div>
 
 <script>
@@ -125,7 +138,7 @@
   const OPTIN_URL  = 'https://prod-40.eastus.logic.azure.com:443/workflows/9a775117498d46a68b56f90fa04582fe/triggers/When_an_HTTP_request_is_received/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2FWhen_an_HTTP_request_is_received%2Frun&sv=1.0&sig=9fEtWpRHtfklVKbaiZhUyiIaQtCrAob6f55f0tFWrAU';
   const OPTOUT_URL = 'https://prod-74.eastus.logic.azure.com:443/workflows/c6d0bf13793a44869bceb55c6a550b8c/triggers/When_an_HTTP_request_is_received/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2FWhen_an_HTTP_request_is_received%2Frun&sv=1.0&sig=jtFAeP9typPEJllSBBIWz3vTXULdKtgG1cK1YOxdkAo';
 
-  function validPhone(v){ return /^\+?\d[\d\s\-()]{6,}$/.test((v||"").trim()); }
+  function validPhone(v){ return /^\+?\d[\d\s\-()\. ,]{6,}$/.test((v||"").trim()); }
 
   function setSubmitting(formEl, isSubmitting) {
     const btn = formEl.querySelector('button[type="submit"]');
