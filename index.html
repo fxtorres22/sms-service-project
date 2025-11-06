@@ -5,38 +5,35 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>SMS Service Project – Fernando Torres</title>
 
-  <!-- Canonical & crawler-friendly meta -->
   <link rel="canonical" href="https://www.sms-service-project.org/">
   <meta name="robots" content="index,follow">
   <meta name="description" content="Public opt-in page for SMS notifications managed by Fernando Torres using Azure Communication Services. Consent-based, low frequency, with clear opt-out.">
 
-  <!-- Open Graph / Twitter -->
-  <meta property="og:title" content="SMS Service Project – Opt-In"/>
-  <meta property="og:description" content="Consent-based SMS notifications. Reply STOP to opt out. Privacy-first, low frequency."/>
+  <meta property="og:title" content="SMS Service Project – Opt-In / Opt-Out"/>
+  <meta property="og:description" content="Consent-based SMS learning project. Reply STOP to opt out. HELP for help. Privacy-first, low frequency."/>
   <meta property="og:url" content="https://www.sms-service-project.org/"/>
   <meta property="og:type" content="website"/>
   <meta name="twitter:card" content="summary"/>
   <meta property="og:image" content="https://www.sms-service-project.org/logo.png">
   <meta property="og:image:alt" content="SMS Service Project logo">
 
-
-  <!-- Favicon (optional) -->
   <link rel="icon" href="/favicon.ico"/>
 
   <style>
-    :root { --ink:#1f2937; --muted:#6b7280; --bg:#f7f9fc; --card:#fff; --ring:#e5e7eb; }
+    :root { --ink:#1f2937; --muted:#6b7280; --bg:#f7f9fc; --card:#fff; --ring:#e5e7eb; --accent:#0a66c2; }
     *{box-sizing:border-box}
     body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--ink);background:var(--bg);margin:0;line-height:1.55}
     header,main,footer{max-width:860px;margin:0 auto;padding:1rem 1rem}
     header{display:flex;align-items:center;gap:.75rem;border-bottom:1px solid var(--ring)}
     header img {width: 72px;height: 72px;margin-right: 0.75rem;}
-    h1{font-size:1.3rem;margin:.25rem 0}
+    h1{font-size:1.35rem;margin:.25rem 0}
     h2{margin:1.25rem 0 .5rem}
     .card{background:var(--card);border:1px solid var(--ring);border-radius:12px;padding:1.25rem;box-shadow:0 1px 0 rgba(0,0,0,.03);margin:1rem 0}
     ul.samples{background:#fafbfd;border:1px dashed var(--ring);border-radius:10px;padding:1rem 1.25rem}
     label{display:block;font-weight:600;margin:.5rem 0 .25rem}
     input[type="text"],input[type="tel"],input[type="email"]{width:100%;padding:.7rem .8rem;border:1px solid var(--ring);border-radius:10px;font-size:1rem;outline:none;background:#fff}
-    button{margin-top:.75rem;padding:.7rem 1rem;border:0;border-radius:10px;cursor:pointer;background:#111827;color:#fff;font-weight:600}
+    button{margin-top:.5rem;padding:.7rem 1rem;border:0;border-radius:999px;cursor:pointer;background:var(--accent);color:#fff;font-weight:700}
+    button:disabled{opacity:.6;cursor:not-allowed}
     .muted{color:var(--muted);font-size:.95rem}
     footer{margin:1rem 0 2rem;text-align:center;color:var(--muted);font-size:.9rem;border-top:1px solid var(--ring);padding-top:1rem}
     .ok{background:#e8f7ef;border:1px solid #c9edd9;color:#1c6b3c;padding:.6rem .8rem;border-radius:8px;margin-top:.6rem;display:none}
@@ -44,14 +41,29 @@
     code{background:#f1f4f8;padding:.2rem .4rem;border-radius:6px}
     .identity{font-size:.95rem;color:#374151}
     .stack{display:grid;gap:1rem}
+    .cta{font-size:.92rem;border-left:4px solid var(--ring);padding:.6rem .8rem;background:#fafcff;border-radius:8px}
+    .kicker{display:inline-block;background:#eef4ff;border:1px solid #cfe0ff;color:#113;padding:.15rem .5rem;border-radius:999px;font-size:.82rem;margin-bottom:.4rem}
     /* Honeypot */
     .hp{position:absolute!important;left:-9999px!important;visibility:hidden!important}
   </style>
+
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"Organization",
+    "name":"SMS Service Project",
+    "url":"https://www.sms-service-project.org/",
+    "email":"contact@sms-service-project.org",
+    "founder":"Fernando Torres",
+    "sameAs":[ "https://github.com/fxtorres22" ]
+  }
+  </script>
 </head>
 <body>
   <header>
     <img src="/logo.png" alt="SMS Service Project logo" width="128" height="128">
     <div>
+      <span class="kicker">Personal learning project</span>
       <h1>SMS Service Project</h1>
       <div class="identity">Consent-based SMS notifications managed by Fernando Torres.</div>
     </div>
@@ -68,22 +80,22 @@
 
     <h2>Program Description</h2>
     <section class="card">
-      <p>Subscribers may receive occasional SMS updates related to apps and prototypes developed by Fernando Torres. Messages are limited in frequency and only sent with consent.</p>
+      <p>Participants (myself and a small group of consenting testers) may receive occasional SMS related to apps and prototypes I’m developing. Messages are limited in frequency and only sent with consent.</p>
       <h3>Example Messages</h3>
       <ul class="samples">
-        <li>[SMS Update] Thanks for joining our notifications. Reply STOP to opt out. HELP for help.</li>
-        <li>[SMS Update] Sample alert for testing and product update purposes.</li>
-        <li>[SMS Update] System check completed at 3:00 PM.</li>
+        <li>[SMS Test] Thanks for joining my personal SMS test program. Reply STOP to opt out. HELP for help.</li>
+        <li>[SMS Test] Sample alert for testing and product update purposes.</li>
+        <li>[SMS Test] System check completed at 3:00 PM.</li>
       </ul>
-      <p class="muted">Typical frequency: less than 10 messages per month. Message &amp; data rates may apply. Carriers are not liable for delayed or undelivered messages.</p>
+      <p class="muted">Typical frequency: fewer than 10 messages per month. Message &amp; data rates may apply. Carriers are not liable for delayed or undelivered messages.</p>
     </section>
 
     <!-- ===== Opt-In Section ===== -->
     <h2 id="opt-in">Opt-In</h2>
     <section class="card">
-      <p>Provide your phone number below to request opt-in. You will receive a confirmation message. You can opt out anytime by replying <code>STOP</code>.</p>
+      <p>Provide your phone number below to request opt-in. You’ll receive a confirmation message. You can opt out anytime by replying <code>STOP</code>.</p>
 
-      <!-- Non-JS form works by itself; JS will enhance it -->
+      <!-- Non-JS form works by itself; JS to enhance it -->
       <form id="optinForm" class="stack" method="POST"
             action="https://prod-40.eastus.logic.azure.com:443/workflows/9a775117498d46a68b56f90fa04582fe/triggers/When_an_HTTP_request_is_received/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2FWhen_an_HTTP_request_is_received%2Frun&sv=1.0&sig=9fEtWpRHtfklVKbaiZhUyiIaQtCrAob6f55f0tFWrAU">
         <!-- Honeypot (leave empty) -->
@@ -92,7 +104,7 @@
         <label for="optinName">Name (optional)</label>
         <input id="optinName" name="name" type="text" placeholder="Your name" inputmode="text" autocomplete="name"/>
 
-        <label for="optinPhone">Phone Number</label>
+        <label for="optinPhone">Mobile phone (required)</label>
         <input id="optinPhone" name="phone" type="tel" placeholder="+1 555 123 4567" required
                inputmode="tel" autocomplete="tel"
                pattern="^\\+?[0-9\\s()\\-\\.]{7,}$" aria-describedby="optinCompliance"/>
@@ -100,11 +112,12 @@
         <label for="optinEmail">Email (optional, for confirmation)</label>
         <input id="optinEmail" name="email" type="email" placeholder="you@example.com" inputmode="email" autocomplete="email"/>
 
-        <p id="optinCompliance" class="muted">
-          By submitting, you consent to receive occasional SMS notifications for this service.
-          Msg &amp; data rates may apply. Reply <strong>STOP</strong> to opt out; <strong>HELP</strong> for help.
-          See <a href="/privacy.html">Privacy Policy</a> and <a href="/terms.html">Terms</a>. Frequency: &lt;10/mo.
-        </p>
+        <div id="optinCompliance" class="cta">
+          <strong>Program:</strong> SMS Service Project (personal learning). <strong>Frequency:</strong> up to 10 msgs/mo.
+          <strong>Charges:</strong> Msg &amp; data rates may apply. <strong>Opt-out:</strong> Reply <code>STOP</code> to cancel.
+          <strong>Help:</strong> Email <a href="mailto:contact@sms-service-project.org">contact@sms-service-project.org</a>.
+          By submitting, you agree to the <a href="/terms.html">Terms</a> and <a href="/privacy.html">Privacy Policy</a>.
+        </div>
 
         <button type="submit" data-label="Request Opt-In">Request Opt-In</button>
         <div id="optinOk" class="ok" role="status" aria-live="polite">Thanks! Your opt-in request was received. You’ll get a confirmation shortly.</div>
@@ -121,16 +134,16 @@
             action="https://prod-74.eastus.logic.azure.com:443/workflows/c6d0bf13793a44869bceb55c6a550b8c/triggers/When_an_HTTP_request_is_received/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2FWhen_an_HTTP_request_is_received%2Frun&sv=1.0&sig=jtFAeP9typPEJllSBBIWz3vTXULdKtgG1cK1YOxdkAo">
         <input class="hp" type="text" name="website" tabindex="-1" autocomplete="off"/>
 
-        <label for="optoutPhone">Phone Number</label>
+        <label for="optoutPhone">Mobile phone (required)</label>
         <input id="optoutPhone" name="phone" type="tel" placeholder="+1 555 123 4567" required
                inputmode="tel" autocomplete="tel"
                pattern="^\\+?[0-9\\s()\\-\\.]{7,}$" aria-describedby="optoutCompliance"/>
 
-        <p id="optoutCompliance" class="muted">
-          Removal requests are processed promptly. For help, email
-          <a href="mailto:contact@sms-service-project.org">contact@sms-service-project.org</a>.
+        <div id="optoutCompliance" class="cta">
+          <strong>Opt-out:</strong> Reply <code>STOP</code> at any time or submit this form. Removal may take up to 24 hours.
+          <strong>Help:</strong> Email <a href="mailto:contact@sms-service-project.org">contact@sms-service-project.org</a>.
           See <a href="/privacy.html">Privacy</a> and <a href="/terms.html">Terms</a>.
-        </p>
+        </div>
 
         <button type="submit" data-label="Request Opt-Out">Request Opt-Out</button>
         <div id="optoutOk" class="ok" role="status" aria-live="polite">Your opt-out request was received.</div>
@@ -138,29 +151,19 @@
       </form>
     </section>
 
-    <!-- ===== Additional Info ===== -->
-    <section class="card">
-      <p>
-        <a href="/privacy.html">Privacy Policy</a> &nbsp;|&nbsp;
-        <a href="/terms.html">Terms and Conditions</a> &nbsp;|&nbsp;
-        <a href="/opt-in.html">Minimal Opt-In Page</a> &nbsp;|&nbsp;
-        <a href="/opt-out.html">Minimal Opt-Out Page</a>
-      </p>
-    </section>
 
-    <!-- Identity / Contact / Hours improve “established” signal -->
     <section class="card">
-      <strong>Contact &amp; Support</strong>
+      <strong>About &amp; Support</strong>
       <p class="identity">
         Owner/Operator: Fernando Torres<br/>
         Email: <a href="mailto:contact@sms-service-project.org">contact@sms-service-project.org</a><br/>
-        <p>Location: Columbus, Ohio (United States)</p>
+        <!--Postal address: <em>(Add PO Box or commercial mailbox here)</em><br/>-->
         Support hours: Mon–Fri, 9:00am–5:00pm ET
       </p>
-      <p class="muted">Status: Operational. Last updated: October 25, 2025.</p>
+      <p class="muted">Status: Operational. Last updated: November 4, 2025.</p>
     </section>
 
-    <!-- No-JS note (forms still submit without JS) -->
+    <!-- No-JS note -->
     <noscript>
       <div class="card">
         <p><strong>Note:</strong> JavaScript is disabled. Forms still submit normally without JavaScript.</p>
@@ -171,9 +174,9 @@
   <footer>© 2025 Fernando Torres — SMS Service Project</footer>
 
   <script>
-    // ==== CONFIG: Logic App endpoints (already set in form action) ====
-    const OPTIN_URL  = document.getElementById('optinForm')?.getAttribute('action');
-    const OPTOUT_URL = document.getElementById('optoutForm')?.getAttribute('action');
+    // ==== CONFIG: Logic App endpoints ====
+    const optinForm  = document.getElementById('optinForm');
+    const optoutForm = document.getElementById('optoutForm');
 
     function validPhone(v){ return /^\+?\d[\d\s\-().]{6,}$/.test((v||"").trim()); }
 
@@ -192,17 +195,15 @@
       });
     }
 
-    // ===== OPT-IN (progressive enhancement) =====
-    const optinForm = document.getElementById('optinForm');
+    // ===== OPT-IN =====
     const optinOk = document.getElementById('optinOk');
     const optinErr = document.getElementById('optinErr');
 
     optinForm?.addEventListener('submit', async (e) => {
-      // Enhance only if fetch is available
-      if (!window.fetch) return;
+      if (!window.fetch) return; // allow normal POST without JS
       e.preventDefault();
 
-      // honeypot
+      // Honeypot (spam trap)
       if ((optinForm.querySelector('input[name="company"]')?.value || '').trim() !== '') return;
 
       optinOk.style.display = 'none';
@@ -220,7 +221,8 @@
 
       setSubmitting(optinForm, true);
       try {
-        const res = await postJson(OPTIN_URL, { name: name || null, phone, email: email || null, source: 'github-pages' });
+        const url = optinForm.getAttribute('action');
+        const res = await postJson(url, { name: name || null, phone, email: email || null, source: 'github-pages' });
         if (!res.ok) throw new Error('HTTP ' + res.status + ' ' + (await res.text().catch(()=>'')));
         optinOk.style.display = 'block';
         optinForm.reset();
@@ -233,7 +235,6 @@
     });
 
     // ===== OPT-OUT (progressive enhancement) =====
-    const optoutForm = document.getElementById('optoutForm');
     const optoutOk = document.getElementById('optoutOk');
     const optoutErr = document.getElementById('optoutErr');
 
@@ -255,7 +256,8 @@
 
       setSubmitting(optoutForm, true);
       try {
-        const res = await postJson(OPTOUT_URL, { phone });
+        const url = optoutForm.getAttribute('action');
+        const res = await postJson(url, { phone });
         if (!res.ok) throw new Error('HTTP ' + res.status + ' ' + (await res.text().catch(()=>'')));
         optoutOk.style.display = 'block';
         optoutForm.reset();
