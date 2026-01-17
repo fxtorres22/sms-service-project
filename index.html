@@ -41,7 +41,12 @@
     code{background:#f1f4f8;padding:.2rem .4rem;border-radius:6px}
     .identity{font-size:.95rem;color:#374151}
     .stack{display:grid;gap:1rem}
+    
+    /* Improved Compliance Box CSS */
     .cta{font-size:.92rem;border-left:4px solid var(--ring);padding:.6rem .8rem;background:#fafcff;border-radius:8px}
+    .cta label { display: flex; gap: 0.5rem; align-items: flex-start; font-weight: normal; }
+    .cta input[type="checkbox"] { flex-shrink: 0; margin-top: 0.3rem; }
+
     .kicker{display:inline-block;background:#eef4ff;border:1px solid #cfe0ff;color:#113;padding:.15rem .5rem;border-radius:999px;font-size:.82rem;margin-bottom:.4rem}
     /* Honeypot */
     .hp{position:absolute!important;left:-9999px!important;visibility:hidden!important}
@@ -49,9 +54,36 @@
 
   <link rel="preconnect" href="https://challenges.cloudflare.com">
 
+  <script>
+    // This callback is required by the 'onload=...' parameter below
+    window.onloadTurnstileCallback = function () {
+        // Safe check: If the body isn't ready, wait for it
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', renderWidgets);
+        } else {
+            renderWidgets();
+        }
+    };
+
+    // Render logic separated for safety
+    function renderWidgets() {
+        if (document.getElementById('turnstile-optin')) {
+            window.optinWidgetId = turnstile.render('#turnstile-optin', {
+                sitekey: '0x4AAAAAACNF9hSVJPk4wrzF',
+                theme: 'light',
+            });
+        }
+        if (document.getElementById('turnstile-optout')) {
+            window.optoutWidgetId = turnstile.render('#turnstile-optout', {
+                sitekey: '0x4AAAAAACNF9hSVJPk4wrzF',
+                theme: 'light',
+            });
+        }
+    }
+  </script>
+
   <script 
     src="https://challenges.cloudflare.com/turnstile/v0/api.js?onload=onloadTurnstileCallback&render=explicit" 
-    async 
     defer
   ></script>
 
@@ -121,29 +153,32 @@
       <!-- Non-JS form works by itself; JS to enhance it -->
       <form id="optinForm" class="stack" method="POST"
             action="https://prod-40.eastus.logic.azure.com:443/workflows/9a775117498d46a68b56f90fa04582fe/triggers/When_an_HTTP_request_is_received/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2FWhen_an_HTTP_request_is_received%2Frun&sv=1.0&sig=9fEtWpRHtfklVKbaiZhUyiIaQtCrAob6f55f0tFWrAU">
-        <!-- Honeypot (leave empty) -->
+        <!-- Honeypot -->
         <input class="hp" type="text" name="company" tabindex="-1" autocomplete="off"/>
 
         <label for="optinName">Name (optional)</label>
         <input id="optinName" name="name" type="text" placeholder="Your name" inputmode="text" autocomplete="name"/>
 
         <label for="optinPhone">Mobile phone (required)</label>
-        <input id="optinPhone" name="phone" type="tel" placeholder="+1 555 123 4567" required
+        <input id="optinPhone" name="phone" type="tel" placeholder="+1 (555) 123-4567" required
                inputmode="tel" autocomplete="tel"
                pattern="^\\+?[0-9\\s()\\-\\.]{7,}$" aria-describedby="optinCompliance"/>
 
         <label for="optinEmail">Email (optional, for confirmation)</label>
         <input id="optinEmail" name="email" type="email" placeholder="you@example.com" inputmode="email" autocomplete="email"/>
 
-        <div id="optinCompliance" class="cta" style="margin: 1rem 0; font-size: 0.9rem;">
-          <input type="checkbox" id="consentCheck" required>
-          <label for="consentCheck" style="display:inline; font-weight:normal;">
-            I agree to receive SMS notifications from Fernando Torres. I understand message frequency varies and data rates may apply.
-            Reply <strong>STOP</strong> to opt out.
+        <div id="optinCompliance" class="cta" style="margin: 1rem 0;">
+          <label for="consentCheck">
+            <input type="checkbox" id="consentCheck" required>
+            <span>
+              I agree to receive SMS notifications from Fernando Torres. I understand message frequency varies and data rates may apply.
+              Reply <strong>STOP</strong> to opt out.
+            </span>
           </label>
-          <br/>
-          <strong>Help:</strong> Email <a href="mailto:contact@sms-service-project.org">contact@sms-service-project.org</a>.
-          By submitting, you agree to the <a href="/terms.html">Terms</a> and <a href="/privacy.html">Privacy Policy</a>.
+          <div style="margin-top:0.5rem; font-size:0.9em;">
+            <strong>Help:</strong> Email <a href="mailto:contact@sms-service-project.org">contact@sms-service-project.org</a>.
+            By submitting, you agree to the <a href="/terms.html">Terms</a> and <a href="/privacy.html">Privacy Policy</a>.
+          </div>
         </div>
 
         <div id="turnstile-optin"></div>
@@ -164,7 +199,7 @@
         <input class="hp" type="text" name="website" tabindex="-1" autocomplete="off"/>
 
         <label for="optoutPhone">Mobile phone (required)</label>
-        <input id="optoutPhone" name="phone" type="tel" placeholder="+1 555 123 4567" required
+        <input id="optoutPhone" name="phone" type="tel" placeholder="+1 (555) 123-4567" required
                inputmode="tel" autocomplete="tel"
                pattern="^\\+?[0-9\\s()\\-\\.]{7,}$" aria-describedby="optoutCompliance"/>
 
@@ -189,7 +224,7 @@
         Legal identity (business name for messaging): Fernando Torres (individual)<br/>
         Owner/Operator: Fernando Torres<br/>
         Email: <a href="mailto:contact@sms-service-project.org">contact@sms-service-project.org</a><br/>
-        <!--Postal address: <em>(Add PO Box or commercial mailbox here if you choose)</em><br/>-->
+        <!--Postal address: <em>(Add PO Box or commercial mailbox here)</em><br/>-->
         Support hours: Mon–Fri, 9:00am–5:00pm ET
       </p>
       <p class="muted">Status: Operational. Last updated: January 4, 2026.</p>
@@ -209,27 +244,6 @@
     // ==== CONFIG: Logic App endpoints ====
     const optinForm  = document.getElementById('optinForm');
     const optoutForm = document.getElementById('optoutForm');
-
-    // Store widget IDs so we can reset the specific one later
-    let optinWidgetId;
-    let optoutWidgetId;
-
-    // ==== TURNSTILE SETUP ====
-    // This function runs automatically when the Turnstile script loads
-    window.onloadTurnstileCallback = function () {
-        
-        // Render Opt-In Widget
-        optinWidgetId = turnstile.render('#turnstile-optin', {
-            sitekey: '0x4AAAAAACNF9hSVJPk4wrzF',
-            theme: 'light',
-        });
-
-        // Render Opt-Out Widget
-        optoutWidgetId = turnstile.render('#turnstile-optout', {
-            sitekey: '0x4AAAAAACNF9hSVJPk4wrzF',
-            theme: 'light',
-        });
-    };
 
     function validPhone(v){ return /^\+?\d[\d\s\-().]{6,}$/.test((v||"").trim()); }
 
@@ -296,8 +310,10 @@
         optinOk.style.display = 'block';
         optinForm.reset();
         
-        // RESET SPECIFIC WIDGET
-        if (window.turnstile) window.turnstile.reset(optinWidgetId);
+        // RESET SPECIFIC WIDGET (Using global variable)
+        if (window.turnstile && window.optinWidgetId !== undefined) {
+            window.turnstile.reset(window.optinWidgetId);
+        }
 
       } catch (err) {
         optinErr.textContent = 'Request failed. ' + (err?.message || '');
@@ -349,8 +365,10 @@
         optoutOk.style.display = 'block';
         optoutForm.reset();
 
-        // RESET SPECIFIC WIDGET
-        if (window.turnstile) window.turnstile.reset(optoutWidgetId);
+        // RESET SPECIFIC WIDGET (Using global variable)
+        if (window.turnstile && window.optoutWidgetId !== undefined) {
+            window.turnstile.reset(window.optoutWidgetId);
+        }
 
       } catch (err) {
         optoutErr.textContent = 'Request failed. ' + (err?.message || '');
@@ -359,6 +377,6 @@
         setSubmitting(optoutForm, false);
       }
     });
-</script>
+  </script>
 </body>
 </html>
