@@ -47,6 +47,14 @@
     .hp{position:absolute!important;left:-9999px!important;visibility:hidden!important}
   </style>
 
+  <link rel="preconnect" href="https://challenges.cloudflare.com">
+
+  <script
+  src="https://challenges.cloudflare.com/turnstile/v0/api.js"
+  async
+  defer
+  ></script>
+
   <script type="application/ld+json">
   {
     "@context":"https://schema.org",
@@ -138,6 +146,12 @@
           By submitting, you agree to the <a href="/terms.html">Terms</a> and <a href="/privacy.html">Privacy Policy</a>.
         </div>
 
+        <div class="cf-turnstile"
+        data-sitekey="0x4AAAAAACNF9hSVJPk4wrzF"
+        data-theme="light"
+        data-size="normal"
+        ></div>
+
         <button type="submit" data-label="Request Opt-In">Request Opt-In</button>
         <div id="optinOk" class="ok" role="status" aria-live="polite">Thanks! Your opt-in request was received. You’ll get a confirmation shortly.</div>
         <div id="optinErr" class="err" role="alert" aria-live="assertive" style="display:none"></div>
@@ -163,6 +177,12 @@
           <strong>Help:</strong> Email <a href="mailto:contact@sms-service-project.org">contact@sms-service-project.org</a>.
           See <a href="/privacy.html">Privacy</a> and <a href="/terms.html">Terms</a>.
         </div>
+
+        <div class="cf-turnstile"
+        data-sitekey="0x4AAAAAACNF9hSVJPk4wrzF"
+        data-theme="light"
+        data-size="normal"
+        ></div>
 
         <button type="submit" data-label="Request Opt-Out">Request Opt-Out</button>
         <div id="optoutOk" class="ok" role="status" aria-live="polite">Your opt-out request was received.</div>
@@ -222,18 +242,28 @@
       if (!window.fetch) return; // allow normal POST without JS
       e.preventDefault();
 
-      // Honeypot (spam trap)
+      // Honeypot
       if ((optinForm.querySelector('input[name="company"]')?.value || '').trim() !== '') return;
 
       optinOk.style.display = 'none';
       optinErr.style.display = 'none';
+
+      // --- Turnstile Check ---
+      const formData = new FormData(optinForm);
+      const token = formData.get('cf-turnstile-response');
+      if (!token) {
+        optinErr.textContent = 'Please complete the security check.';
+        optinErr.style.display = 'block';
+        return;
+      }
+      // -----------------------
 
       const name  = document.getElementById('optinName').value;
       const phone = document.getElementById('optinPhone').value;
       const email = document.getElementById('optinEmail').value;
 
       if (!validPhone(phone)) {
-        optinErr.textContent = 'Please enter a valid phone number (include country code if outside US).';
+        optinErr.textContent = 'Please enter a valid phone number.';
         optinErr.style.display = 'block';
         return;
       }
@@ -241,10 +271,18 @@
       setSubmitting(optinForm, true);
       try {
         const url = optinForm.getAttribute('action');
-        const res = await postJson(url, { name: name || null, phone, email: email || null, source: 'github-pages' });
-        if (!res.ok) throw new Error('HTTP ' + res.status + ' ' + (await res.text().catch(()=>'')));
+        const res = await postJson(url, { 
+            name: name || null, 
+            phone, 
+            email: email || null, 
+            source: 'github-pages',
+            token: token // Sending token to Azure
+        });
+        
+        if (!res.ok) throw new Error('HTTP ' + res.status);
         optinOk.style.display = 'block';
         optinForm.reset();
+        if (window.turnstile) window.turnstile.reset();
       } catch (err) {
         optinErr.textContent = 'Request failed. ' + (err?.message || '');
         optinErr.style.display = 'block';
@@ -261,10 +299,21 @@
       if (!window.fetch) return;
       e.preventDefault();
 
+      // Honeypot
       if ((optoutForm.querySelector('input[name="website"]')?.value || '').trim() !== '') return;
 
       optoutOk.style.display = 'none';
       optoutErr.style.display = 'none';
+
+      // --- ADDED: Turnstile Check ---
+      const formData = new FormData(optoutForm);
+      const token = formData.get('cf-turnstile-response');
+      if (!token) {
+        optoutErr.textContent = 'Please complete the security check.';
+        optoutErr.style.display = 'block';
+        return;
+      }
+      // ------------------------------
 
       const phone = document.getElementById('optoutPhone').value;
       if (!validPhone(phone)) {
@@ -276,10 +325,16 @@
       setSubmitting(optoutForm, true);
       try {
         const url = optoutForm.getAttribute('action');
-        const res = await postJson(url, { phone });
+        // --- ADDED: token in payload ---
+        const res = await postJson(url, { 
+          phone,
+          token: token 
+        });
+
         if (!res.ok) throw new Error('HTTP ' + res.status + ' ' + (await res.text().catch(()=>'')));
         optoutOk.style.display = 'block';
         optoutForm.reset();
+        if (window.turnstile) window.turnstile.reset();
       } catch (err) {
         optoutErr.textContent = 'Request failed. ' + (err?.message || '');
         optoutErr.style.display = 'block';
