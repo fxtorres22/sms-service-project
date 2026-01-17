@@ -127,9 +127,13 @@
         <label for="optinEmail">Email (optional, for confirmation)</label>
         <input id="optinEmail" name="email" type="email" placeholder="you@example.com" inputmode="email" autocomplete="email"/>
 
-        <div id="optinCompliance" class="cta">
-          <strong>Program:</strong> SMS Service Project (personal learning). <strong>Frequency:</strong> up to 10 msgs/mo.
-          <strong>Charges:</strong> Msg &amp; data rates may apply. <strong>Opt-out:</strong> Reply <code>STOP</code> to cancel.
+        <div id="optinCompliance" class="cta" style="margin: 1rem 0; font-size: 0.9rem;">
+          <input type="checkbox" id="consentCheck" required>
+          <label for="consentCheck" style="display:inline; font-weight:normal;">
+            I agree to receive SMS notifications from Fernando Torres. I understand message frequency varies and data rates may apply.
+            Reply <strong>STOP</strong> to opt out.
+          </label>
+          <br/>
           <strong>Help:</strong> Email <a href="mailto:contact@sms-service-project.org">contact@sms-service-project.org</a>.
           By submitting, you agree to the <a href="/terms.html">Terms</a> and <a href="/privacy.html">Privacy Policy</a>.
         </div>
