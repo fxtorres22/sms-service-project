@@ -139,8 +139,9 @@
         <input id="optinName" name="name" type="text" placeholder="Your name" inputmode="text" autocomplete="name" />
 
         <label for="optinPhone">Mobile phone (required)</label>
-        <input id="optinPhone" name="phone" type="tel" placeholder="(555) 123-4567" required inputmode="tel"
-          autocomplete="tel" pattern="^\\+?[0-9\\s()\\-\\.]{7,}$" aria-describedby="optinCompliance" />
+        <input id="optinPhone" name="phone" type="tel" placeholder="+1 (555) 123-4567" required
+               inputmode="tel" autocomplete="tel"
+               pattern="^\+?[0-9\s()\-\.]{7,}$" aria-describedby="optinCompliance"/>
 
         <label for="optinEmail">Email (optional)</label>
         <input id="optinEmail" name="email" type="email" placeholder="you@example.com" inputmode="email"
@@ -180,7 +181,7 @@
 
         <label for="optoutPhone">Mobile phone (required)</label>
         <input id="optoutPhone" name="phone" type="tel" placeholder="(555) 123-4567" required inputmode="tel"
-          autocomplete="tel" pattern="^\\+?[0-9\\s()\\-\\\\.]{7,}$" aria-describedby="optoutCompliance" />
+          autocomplete="tel" pattern="^\+?[0-9\s()\-\.]{7,}$" aria-describedby="optoutCompliance" />
 
         <div id="optoutCompliance" class="cta">
           <strong>Opt-out:</strong> Reply <code>STOP</code> at any time or submit this form.
@@ -214,7 +215,10 @@
     const optinForm = document.getElementById('optinForm');
     const optoutForm = document.getElementById('optoutForm');
 
-    function validPhone(v) { return /^\+?\d[\d\s\-().]{6,}$/.test((v || "").trim()); }
+    function validPhone(v) {
+      const digits = (v || '').replace(/\D/g, '');
+      return digits.length >= 7 && digits.length <= 15;
+    }
 
     function setSubmitting(formEl, isSubmitting) {
       const btn = formEl.querySelector('button[type="submit"]');
@@ -233,12 +237,49 @@
 
     // ===== PHONE AUTO-FORMAT =====
     function formatPhone(input) {
-      input.addEventListener('input', function () {
-        let digits = this.value.replace(/\D/g, '');
-        // If starts with 1 (US country code), strip it for formatting
-        if (digits.length > 10 && digits.startsWith('1')) {
-          digits = digits.substring(1);
+      let prevLen = 0;
+
+      input.addEventListener('input', function (e) {
+        const raw = this.value;
+        const currentLen = raw.length;
+        const isDeleting = currentLen < prevLen;
+
+        // If the user is deleting, don't reformat — let them erase freely
+        if (isDeleting) {
+          // Strip any trailing formatting chars so the cursor doesn't get stuck
+          this.value = raw.replace(/[\s()\-]+$/, '');
+          prevLen = this.value.length;
+          return;
         }
+
+        // If the value starts with '+', treat as international — don't auto-format
+        if (raw.startsWith('+')) {
+          // Only allow digits, +, spaces, dashes, parens, dots
+          this.value = raw.replace(/[^+\d\s()\-.]/g, '');
+          prevLen = this.value.length;
+          return;
+        }
+
+        // Extract only digits for US-style formatting
+        let digits = raw.replace(/\D/g, '');
+
+        // 11 digits starting with 1 → format as: 1 (XXX) XXX-XXXX
+        if (digits.length >= 11 && digits.startsWith('1')) {
+          digits = digits.substring(0, 11);
+          const local = digits.substring(1); // 10 local digits
+          let formatted = '1 (' + local.substring(0, 3);
+          if (local.length >= 3) formatted += ') ';
+          if (local.length > 3) formatted += local.substring(3, 6);
+          if (local.length >= 6) formatted += '-';
+          if (local.length > 6) formatted += local.substring(6, 10);
+          this.value = formatted;
+          prevLen = this.value.length;
+          return;
+        }
+
+        // Cap at 10 digits for standard US format
+        digits = digits.substring(0, 10);
+
         let formatted = '';
         if (digits.length > 0) formatted = '(' + digits.substring(0, 3);
         if (digits.length >= 3) formatted += ') ';
@@ -246,6 +287,7 @@
         if (digits.length >= 6) formatted += '-';
         if (digits.length > 6) formatted += digits.substring(6, 10);
         this.value = formatted;
+        prevLen = this.value.length;
       });
     }
     const optinPhone = document.getElementById('optinPhone');
