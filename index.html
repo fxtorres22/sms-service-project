@@ -180,7 +180,7 @@
         <input class="hp" type="text" name="website" tabindex="-1" autocomplete="off" />
 
         <label for="optoutPhone">Mobile phone (required)</label>
-        <input id="optoutPhone" name="phone" type="tel" placeholder="(555) 123-4567" required inputmode="tel"
+        <input id="optoutPhone" name="phone" type="tel" placeholder="+1 (555) 123-4567" required inputmode="tel"
           autocomplete="tel" pattern="^\+?[0-9\s()\-\.]{7,}$" aria-describedby="optoutCompliance" />
 
         <div id="optoutCompliance" class="cta">
@@ -218,6 +218,39 @@
     function validPhone(v) {
       const digits = (v || '').replace(/\D/g, '');
       return digits.length >= 7 && digits.length <= 15;
+    }
+
+    /**
+     * Normalize a phone value to +1 (XXX) XXX-XXXX format.
+     * Returns { phone, warning } where warning is set if too many digits.
+     */
+    function normalizePhone(raw) {
+      let digits = (raw || '').replace(/\D/g, '');
+
+      // Prepend country code 1 if not already present
+      if (!digits.startsWith('1') || digits.length <= 7) {
+        digits = '1' + digits;
+      }
+
+      const warning = digits.length > 11
+        ? 'Phone number appears too long. Please verify it is correct.'
+        : null;
+
+      // Format as +1 (XXX) XXX-XXXX using whatever digits are available
+      const cc = digits.substring(0, 1);        // country code
+      const area = digits.substring(1, 4);       // area code
+      const prefix = digits.substring(4, 7);     // prefix
+      const line = digits.substring(7, 11);      // line
+      const extra = digits.substring(11);        // any overflow
+
+      let formatted = '+' + cc;
+      if (area) formatted += ' (' + area;
+      if (area.length === 3) formatted += ')';
+      if (prefix) formatted += ' ' + prefix;
+      if (line) formatted += '-' + line;
+      if (extra) formatted += extra;             // keep overflow visible
+
+      return { phone: formatted, warning };
     }
 
     function setSubmitting(formEl, isSubmitting) {
@@ -318,11 +351,18 @@
       }
 
       const name = document.getElementById('optinName').value;
-      const phone = document.getElementById('optinPhone').value;
+      const rawPhone = document.getElementById('optinPhone').value;
       const email = document.getElementById('optinEmail').value;
 
-      if (!validPhone(phone)) {
+      if (!validPhone(rawPhone)) {
         optinErr.textContent = '✕ Please enter a valid phone number.';
+        optinErr.style.display = 'block';
+        return;
+      }
+
+      const { phone, warning: phoneWarning } = normalizePhone(rawPhone);
+      if (phoneWarning) {
+        optinErr.textContent = '⚠ ' + phoneWarning;
         optinErr.style.display = 'block';
         return;
       }
@@ -377,9 +417,16 @@
         return;
       }
 
-      const phone = document.getElementById('optoutPhone').value;
-      if (!validPhone(phone)) {
+      const rawPhone = document.getElementById('optoutPhone').value;
+      if (!validPhone(rawPhone)) {
         optoutErr.textContent = '✕ Please enter a valid phone number.';
+        optoutErr.style.display = 'block';
+        return;
+      }
+
+      const { phone, warning: phoneWarning } = normalizePhone(rawPhone);
+      if (phoneWarning) {
+        optoutErr.textContent = '⚠ ' + phoneWarning;
         optoutErr.style.display = 'block';
         return;
       }
