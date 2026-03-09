@@ -371,9 +371,9 @@
       try {
         const url = optinForm.getAttribute('action');
         const res = await postJson(url, {
-          name: name || null,
+          name: name.trim() || 'Unknown',
           phone,
-          email: email || null,
+          email: email.trim() || 'Unknown',
           source: 'github-pages',
           token: token
         });
